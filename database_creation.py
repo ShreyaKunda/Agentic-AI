@@ -1,36 +1,29 @@
-#!/bin/bash
+import requests
+from bs4 import BeautifulSoup
+from urllib.parse import urljoin
+import os
 
-# Base URL
-BASE_URL="https://www.malware-traffic-analysis.net/2025"
+# Example URL to one of the index.html pages
+base_url = "https://www.malware-traffic-analysis.net/2025/07/23/index.html"
+session = requests.Session()
 
-# List of dates to pull from
-DATES=("07-23" "07-22" "07-21")  # You can add more manually or automate this part
+# Set headers to mimic a browser
+headers = {
+    "User-Agent": "Mozilla/5.0"
+}
 
-# Create folder if not exists
-mkdir -p pcap_database
+# Get HTML page
+response = session.get(base_url, headers=headers)
+soup = BeautifulSoup(response.text, 'html.parser')
 
-for DATE in "${DATES[@]}"; do
-    # Full page URL
-    PAGE_URL="$BASE_URL/$DATE.html"
+# Find all ZIP links
+for link in soup.find_all('a', href=True):
+    href = link['href']
+    if href.endswith('.zip'):
+        zip_url = urljoin(base_url, href)
+        zip_name = href.split('/')[-1]
 
-    echo ">>> Checking $PAGE_URL"
-
-    # Get list of zip files
-    ZIP_LINKS=$(wget -qO- "$PAGE_URL" | grep -oP '(?<=href=")[^"]+\.zip')
-
-    for ZIP_PATH in $ZIP_LINKS; do
-        ZIP_NAME=$(basename "$ZIP_PATH")
-        FULL_URL="$BASE_URL/$ZIP_PATH"
-        LOCAL_ZIP="pcap_database/$ZIP_NAME"
-        
-        echo ">>> Downloading $FULL_URL"
-        wget --no-check-certificate -O "$LOCAL_ZIP" "$FULL_URL"
-
-        # Derive password from date (format: infected_YYYYMMDD)
-        ZIP_DATE=$(echo "$ZIP_NAME" | grep -oP '\d{8}')  # e.g., 20250723
-        PASSWORD="infected_$ZIP_DATE"
-
-        echo ">>> Unzipping $ZIP_NAME with password $PASSWORD"
-        unzip -P "$PASSWORD" "$LOCAL_ZIP" -d pcap_database/
-    done
-done
+        print(f"Downloading: {zip_url}")
+        r = session.get(zip_url, headers=headers)
+        with open(zip_name, 'wb') as f:
+            f.write(r.content)
