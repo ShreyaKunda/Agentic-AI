@@ -1,0 +1,101 @@
+Here's a summary analysis of your Snort alert log file (snort_friday.txt) based on the following metrics:
+
+
+---
+
+📊 Summary Report
+
+✅ Total Alerts:
+
+≈ 236 alerts
+
+
+
+---
+
+⚠️ Alerts by Priority:
+
+Priority	Count
+
+1	74
+2	59
+3	103
+
+
+
+---
+
+🗂️ Alerts by Category:
+
+Classification	Count
+
+Potential Corporate Privacy Violation	56
+Potentially Bad Traffic	79
+Detection of a Network Scan	92
+Generic Protocol Command Decode	1
+Attempted Administrator Privilege Gain	1
+
+
+
+---
+
+🔝 Top 10 Alert Signatures:
+
+SID	Signature Description	Count
+
+1:1917:6	SCAN UPnP service discover attempt	92
+1:527:8	BAD-TRAFFIC same SRC/DST	79
+1:2009702:5	ET POLICY DNS Update From External net	56
+1:2657:8	SSLv2 Client_Hello with pad overflow	1
+1:538:15	NETBIOS SMB IPC$ unicode share access	1
+
+
+
+---
+
+📡 Protocol Distribution:
+
+Protocol	Count
+
+UDP	150
+IPV6-ICMP	79
+TCP	7
+
+
+
+---
+
+🌐 Top 5 Source IPs:
+
+Source IP	Count
+
+192.168.10.14	108
+192.168.10.5	61
+192.168.10.8	14
+192.168.10.9	8
+192.168.10.25	1
+
+
+
+---
+
+🎯 Top 5 Destination IPs:
+
+Destination IP	Count
+
+239.255.255.250	123
+192.168.10.3	56
+ff02::/ffxx::	48
+137.116.74.190	1
+192.168.10.50	1
+
+
+> Note: ff02:: indicates multicast IPv6 addresses in the log.
+
+
+
+
+---
+
+Would you like this exported as a CSV or visualized as a chart or dashboard?
+
